@@ -1,0 +1,13 @@
+# remove un-needed files
+*.log
+*.tmp
+logs/
+tmp/
+prototype/
+
+# windows files
+desktop.ini
+
+# keep these files
+!.htaccess
+!.gitkeep
