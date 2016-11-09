@@ -134,21 +134,35 @@ var ShitGame = function () {
 
         $.entities = [];
         
-        $.player = new PlayerEntity(GameEngine);
+        GameClient.getSocket().emit("join", {type: 1});
+        
+        /*$.player = new PlayerEntity(GameEngine);
         $.player.setId($.id);
         $.player.ai = false;
         $.player.init(300, 200, 50);
         $.entities.push($.player);
-
+*/
         $.id++;
         
-        phaser.camera.follow($.player.sprite, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
+        //phaser.camera.follow($.player.sprite, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
 	};
     
+    $.addPlayer = function(options) {
+        var player = new PlayerEntity(GameEngine);
+        player.setId(options.id);
+        player.ai = false;
+        player.init(options.x, options.y, options.z);
+        
+        if (options.isLocal)
+            $.player = player;
+        
+        $.entities.push(player);
+    };
+    
 	$.update = function() {
-        if (phaser.input.keyboard.isDown(32) && $.player.getZ() < -18) {
-            $.player.setVelocity(0, 0, 269);
-        }
+        //if (phaser.input.keyboard.isDown(32) && $.player.getZ() < -18) {
+        //    $.player.setVelocity(0, 0, 269);
+        //}
         
         var speed = 4.8873;
         
@@ -158,16 +172,6 @@ var ShitGame = function () {
         
         var ran = Math.floor((Math.random() * 100) + 1);
 
-        if (phaser.input.keyboard.isDown(Phaser.Keyboard.E)) { // && randNum(1,100) < 5) {
-            var p = new PlayerEntity($);
-            p.setId($.id);
-            p.ai = true;
-            p.init($.player.getX(), $.player.getY(), 0);
-            $.entities.push(p);
-            console.log("spawn");
-            ++$.id;
-        }
-        
         if (phaser.input.keyboard.isDown(Phaser.Keyboard.SHIFT))
             speed *= 1.666;
         
@@ -180,39 +184,41 @@ var ShitGame = function () {
             ie.init(10 + randNum(0, 30), 10 + randNum(0, 30), 0)
         }
         
-        if (phaser.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
-            direction = "W";
-            $.player.getSprite().body.velocity.x -= speed;
-        } else if (phaser.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
-            direction = "E";
-            $.player.getSprite().body.velocity.x += speed;
-        } else {
-            $.player.getSprite().body.velocity.x = 0;
+        if ($.player !== null) {
+            if (phaser.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+                direction = "W";
+                $.player.getSprite().body.velocity.x -= speed;
+            } else if (phaser.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+                direction = "E";
+                $.player.getSprite().body.velocity.x += speed;
+            } else {
+                $.player.getSprite().body.velocity.x = 0;
+            }
+            
+            if (phaser.input.keyboard.isDown(Phaser.Keyboard.UP)) {
+                direction = "N" + direction;
+                $.player.getSprite().body.velocity.y -= speed;
+            } else if (phaser.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
+                direction = "S" + direction;
+                $.player.getSprite().body.velocity.y += speed;
+            } else {
+                $.player.getSprite().body.velocity.y = 0;
+            }
+            
+            // console.log(direction);
+            
+            if ($.player.getSprite().body.velocity.x != 0 || $.player.getSprite().body.velocity.y != 0)
+                isMoving  = true;
+            
+            if (direction != "") {
+                $.player.setDirection(direction);
+            }
+            
+            if (isMoving)
+                $.player.sprite.animations.play(direction, speed , true);
+            else
+                $.player.sprite.frameName = (direction == "" ? $.player.getDirection() : direction) + "1";
         }
-        
-        if (phaser.input.keyboard.isDown(Phaser.Keyboard.UP)) {
-            direction = "N" + direction;
-            $.player.getSprite().body.velocity.y -= speed;
-        } else if (phaser.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
-            direction = "S" + direction;
-            $.player.getSprite().body.velocity.y += speed;
-        } else {
-            $.player.getSprite().body.velocity.y = 0;
-        }
-        
-        // console.log(direction);
-        
-        if ($.player.getSprite().body.velocity.x != 0 || $.player.getSprite().body.velocity.y != 0)
-            isMoving  = true;
-        
-        if (direction != "") {
-            $.player.setDirection(direction);
-        }
-        
-        if (isMoving)
-            $.player.sprite.animations.play(direction, speed , true);
-        else
-            $.player.sprite.frameName = (direction == "" ? $.player.getDirection() : direction) + "1";
         
         $.map.update();
         
@@ -226,7 +232,7 @@ var ShitGame = function () {
 
         //$.isoGroup.add($.player.sprite);
 
-        phaser.physics.isoArcade.collide($.isoGroup, $.player.sprite);
+        //phaser.physics.isoArcade.collide($.isoGroup, $.player.sprite);
         phaser.iso.simpleSort($.isoGroup);
     };
 

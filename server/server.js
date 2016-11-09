@@ -1,88 +1,99 @@
 var Server = function(options) {
 
-	var 
-		gameport        = process.env.PORT || 4004,
+	var _ = this;
 
-		http            = require("http"),
-		io              = require('socket.io'),
-		express         = require('express'),
-		UUID            = require('node-uuid'),
+	this.express = require("express");
+	this.app     = this.express();
+	
+	var events  = require("events");
+	this.events = new events.EventEmitter();
+	
+	this.app.use(this.express.static(__dirname));
+	
+	this.players = [];
+	this.entities= [];
+	this.entityId= 0;
 
-		verbose         = false,
-		app             = express()
-	;
-
-	app.listen( gameport );
-
-	//Log something so we know that it succeeded.
-	console.log('\t :: Express :: Listening on port ' + gameport );
-
-	//By default, we forward the / path to index.html automatically.
-	app.get( '/', function( req, res ){ 
-		res.sendfile( __dirname + '/simplest.html' );
+	this.server = this.app.listen(options.port, function() {
+		console.log("[!] Server running on port %s", this.address().port);
 	});
+	
+	this.io = require("socket.io")(this.server);
+	
+	this.getSyncData = function() {
+		var data = {
+			players : []
+		};
+		
+		for (var i = 0; i < _.players.length; ++i)
+			data.players.push(_.players[i].getData());
+		
+		return data;
+	};
+	
+	this.init = function() {
+		this.io.on("connection", function(client) {
+			console.log("[!] New connection");
+			
+			var player = new (require("./player"))(client);
+			player.setEntityId(_.entityId);
+			_.players.push(player);
+			
+			client.emit("welcome", {
+				test: 6
+			});
+			
+			client.on("test", function(data) {
+				console.log("Client sent " + data.number);
+			});
 
-	//This handler will listen for requests on /*, any file from the root of our server.
-	//See expressjs documentation for more info on routing.
-
-	app.get( '/*' , function( req, res, next ) {
-
-		//This is the current file they have requested
-		var file = req.params[0]; 
-
-		//For debugging, we can track what files are requested.
-		if(verbose)
-			console.log('\t :: Express :: file requested : ' + file);
-
-		//Send the requesting client the file.
-		res.sendfile( __dirname + '/' + file );
-
-	});
-
-	var _ = http.createServer(app);
-
-	//Create a socket.io instance using our express server
-	var sio = io.listen(_);
-
-	//Configure the socket.io connection settings. 
-	//See http://socket.io/
-	//sio.configure(function (){
-
-		sio.set('log level', 0);
-
-		sio.set('authorization', function (handshakeData, callback) {
-			callback(null, true); // error first callback style 
+			client.on("join", function() {
+				++_.entityId;
+				
+				console.log("[!] Player joined");
+				
+				player.setLocation(player.getLocation().set(
+					(Math.random() * (200 - 5) + 5).toFixed(3),
+					(Math.random() * (200 - 5) + 5).toFixed(3),
+					(Math.random() * (10 - 5) + 5).toFixed(3)
+				));
+				
+				client.emit("addPlayer", {
+					id       : _.entityId,
+					isLocal  : true,
+					location : player.getData()
+				});
+				
+				client.broadcast.emit("addPlayer", {
+					id       : _.entityId,
+					isLocal  : false,
+					location : player.getData()
+				});
+				
+			});
+			
+			client.on("sync", function(data) {
+				this.players.forEach(function(player) {
+					if (player.getEntityId() == data.entityId)
+						player.getLocation().set(data.x, data.y, data.z);
+				});
+				
+				client.emit("sync", _.getSyncData());
+				client.broadcast.emit("sync", _.getSyncData());
+			});
+			
+			client.on("disconnect", function() {
+				var index = _.players.indexOf(client);
+				_.players.splice(index, 1);
+				console.log("[!] User disconnected, " + _.players.length + " clients connected");
+			});
+			
 		});
-	//});
-
-	console.log(sio.sockets.on);
-
-	//Socket.io will call this function when a client connects, 
-	//So we can send that client a unique ID we use so we can 
-	//maintain the list of players.
-	sio.sockets.on('connection', function (client) {
-
-		//Generate a new UUID, looks something like 
-		//5b2ca132-64bd-4513-99da-90e838ca47d1
-		//and store this on their socket/connection
-		client.userid = UUID();
-
-		//tell the player they connected, giving them their id
-		client.emit('onconnected', { id: client.userid } );
-
-		//Useful to know when someone connects
-		console.log('\t socket.io:: player ' + client.userid + ' connected');
-
-		//When this client disconnects
-		client.on('disconnect', function () {
-
-			//Useful to know when someone disconnects
-			console.log('\t socket.io:: client disconnected ' + client.userid );
-
-		}); //client.on disconnect
-
-	}); //sio.sockets.on connection
+	};
+	
+	this.init();
 
 };
+
 
 module.exports.Server = Server;

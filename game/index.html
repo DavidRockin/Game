@@ -5,8 +5,10 @@
     <script type="text/javascript" src="assets/scripts/phaser-2.4.2.min.js"></script>
     <script type="text/javascript" src="assets/scripts/phaser-plugin-isometric.min.js"></script>
     <script type="text/javascript" src="assets/scripts/easystar-0.3.0.min.js"></script>
+    <script type="text/javascript" src="assets/scripts/socket.io.js"></script>
     <script type="text/javascript" src="assets/scripts/scripts.js"></script>
     
+    <script type="text/javascript" src="assets/scripts/client.js"></script>
     <script type="text/javascript" src="assets/scripts/game_engine.js"></script>
     <script type="text/javascript" src="assets/scripts/entity.js"></script>
     <script type="text/javascript" src="assets/scripts/map.js"></script>
@@ -69,7 +71,9 @@
     }
     
     document.onload = function() {*/
-        var GameEngine = new ShitGame();
+        var GameEngine = new ShitGame(),
+            GameClient = new Client(GameEngine, "http://devops-davidrockin.c9users.io:8080/")
+        ;
         GameEngine.init();
 //    }
     
