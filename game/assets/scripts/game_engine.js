@@ -256,4 +256,21 @@ var ShitGame = function () {
         phaser.debug.text($.entities.length, 2, 14*6, "#00ff00");
         
     };
+    
+    $.updatePlayers = function(players) {
+		players.forEach(function(player) {	
+			var found = 0;
+			
+			$.player.forEach(function(clientPlayer) {
+			    if (clientPlayer.getId() == player.id) {
+			        clientPlayer.move(player.location.x, player.location.y, player.location.z);
+			        found = true;
+			    }
+			});
+			
+			if (!found && ($.player == undefined || player.id != $.player.getId()))
+			    $.addPlayer(player)
+		});
+    };
+    
 };

@@ -75,6 +75,10 @@
             GameClient = new Client(GameEngine, "http://devops-davidrockin.c9users.io:8080/")
         ;
         GameEngine.init();
+        
+        setInterval(function() {
+            GameClient.sendData(GameClient);
+        }, 55);
 //    }
     
 </script>

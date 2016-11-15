@@ -73,6 +73,8 @@ var Server = function(options) {
 			});
 			
 			client.on("sync", function(data) {
+				console.log("Player syncing with us");
+				
 				this.players.forEach(function(player) {
 					if (player.getEntityId() == data.entityId)
 						player.getLocation().set(data.x, data.y, data.z);

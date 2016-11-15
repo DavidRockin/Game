@@ -20,23 +20,31 @@ Client.prototype.init = function() {
 	});
 	
 	this.socket.on("sync", function(data) {
-		alert("sink da ship");
+		$.game.updatePlayers(data.players);
 	});
 	
 	this.socket.on("welcome", function(data) {
 		console.log("Server welcomed us " + data.test);
 	});
 	
-	setInterval(Client.prototype.sendData, 50);
+//	setInterval(Client.prototype.sendData, 50);
+};
+
+Client.prototype.getGame = function() {
+	return this.game;
 };
 
 Client.prototype.getSocket = function() {
 	return this.socket;
 };
 
-Client.prototype.sendData = function() {
-	console.log(this);
-	this.socket.emit("sync", {
-		x : this.game.getPlayer().getX()
+Client.prototype.sendData = function(client) {
+	if (client.game.getPlayer() == null)
+		return;
+	
+	client.socket.emit("sync", {
+		x : client.game.getPlayer().getX(),
+		y : client.game.getPlayer().getY(),
+		z : client.game.getPlayer().getZ()
 	});
 };

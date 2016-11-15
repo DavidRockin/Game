@@ -4,6 +4,11 @@
 logs/
 tmp/
 prototype/
+fat/
+public/
+StatsCraft-Web/
+.gitignore
+www/
 
 # windows files
 desktop.ini
