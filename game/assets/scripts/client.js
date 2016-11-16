@@ -42,9 +42,12 @@ Client.prototype.sendData = function(client) {
 	if (client.game.getPlayer() == null)
 		return;
 	
+	//console.log(client.game.getPlayer().getX());
+	
 	client.socket.emit("sync", {
 		x : client.game.getPlayer().getX(),
 		y : client.game.getPlayer().getY(),
-		z : client.game.getPlayer().getZ()
+		z : client.game.getPlayer().getZ(),
+		d : client.game.getPlayer().getDirection()
 	});
 };

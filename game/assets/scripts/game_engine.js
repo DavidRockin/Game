@@ -149,9 +149,10 @@ var ShitGame = function () {
     
     $.addPlayer = function(options) {
         var player = new PlayerEntity(GameEngine);
-        player.setId(options.id);
+        //console.log(options.id);
         player.ai = false;
-        player.init(options.x, options.y, options.z);
+        player.init(options.location.x, options.location.y, options.location.z);
+        player.setId(options.entityId);
         
         if (options.isLocal)
             $.player = player;
@@ -259,16 +260,31 @@ var ShitGame = function () {
     
     $.updatePlayers = function(players) {
 		players.forEach(function(player) {	
-			var found = 0;
+			var found = false;
 			
-			$.player.forEach(function(clientPlayer) {
-			    if (clientPlayer.getId() == player.id) {
-			        clientPlayer.move(player.location.x, player.location.y, player.location.z);
+			console.log(player.entityId);
+			
+			if (!player.entityId) // || player.entityId == undefined)
+				return;
+			
+			$.entities.forEach(function(entity) {
+				//console.log(entity);
+				//console.log(entity.getId() + " to " + player.entityId);
+//			    if (!(entity instanceof PlayerEntity))
+//			    	return;
+
+				if (player.entityId == _.player.getEntityId())
+				return;
+
+			    if (entity.getId() == player.entityId) {
+			        console.log(player.entityId + " goes to " + parseInt(player.location.x) + " " + parseInt(player.location.y) + " " + parseInt(player.location.z));
+			        entity.move(parseInt(player.location.x), parseInt(player.location.y), parseInt(player.location.z));
+			        entity.setDirection(player.direction);
 			        found = true;
 			    }
 			});
-			
-			if (!found && ($.player == undefined || player.id != $.player.getId()))
+
+			if (!found && ($.player == undefined || player.entityId != $.player.getId()))
 			    $.addPlayer(player)
 		});
     };

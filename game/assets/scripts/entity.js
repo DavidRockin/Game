@@ -45,7 +45,9 @@ Entity.prototype.setHealth = function(health) {
 };
 
 Entity.prototype.move = function(x, y, z) {
-    this.sprite.isoPosition.setTo(x, y, z);
+    this.sprite.isoX = x;
+    this.sprite.isoY = y;
+    this.sprite.isoZ = z;
 };
 
 Entity.prototype.getX = function() {

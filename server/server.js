@@ -35,9 +35,13 @@ var Server = function(options) {
 		this.io.on("connection", function(client) {
 			console.log("[!] New connection");
 			
+			_.entityId++;
+			
 			var player = new (require("./player"))(client);
 			player.setEntityId(_.entityId);
 			_.players.push(player);
+			
+			client.entityId = _.entityId;
 			
 			client.emit("welcome", {
 				test: 6
@@ -48,24 +52,22 @@ var Server = function(options) {
 			});
 
 			client.on("join", function() {
-				++_.entityId;
-				
 				console.log("[!] Player joined");
 				
 				player.setLocation(player.getLocation().set(
 					(Math.random() * (200 - 5) + 5).toFixed(3),
 					(Math.random() * (200 - 5) + 5).toFixed(3),
-					(Math.random() * (10 - 5) + 5).toFixed(3)
+					-49
 				));
 				
 				client.emit("addPlayer", {
-					id       : _.entityId,
+					entityId       : _.entityId,
 					isLocal  : true,
 					location : player.getData()
 				});
 				
 				client.broadcast.emit("addPlayer", {
-					id       : _.entityId,
+					entityId       : _.entityId,
 					isLocal  : false,
 					location : player.getData()
 				});
@@ -75,9 +77,16 @@ var Server = function(options) {
 			client.on("sync", function(data) {
 				console.log("Player syncing with us");
 				
-				this.players.forEach(function(player) {
-					if (player.getEntityId() == data.entityId)
-						player.getLocation().set(data.x, data.y, data.z);
+				//console.log(_.players);
+				_.players.forEach(function(player) {
+					if (player.getEntityId() == client.entityId) {
+					    if (data.x < 0 || data.y < 0 || data.x > 500 || data.y > 500 || data.z < -50 || data.z > 50)
+					        return;
+					    
+					    player.getLocation().set(data.x, data.y, data.z);
+						player.setDirection(data.d);
+						
+					}
 				});
 				
 				client.emit("sync", _.getSyncData());

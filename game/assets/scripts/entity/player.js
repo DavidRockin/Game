@@ -32,7 +32,7 @@ PlayerEntity.prototype.init = function(x, y, z) {
 	this.sprite.body.collideWorldBounds = true;
 	this.sprite.body.gravity.z = -400;
 	this.waveAngle = 0;
-	this.sprite.isoZ = 50;    
+	//this.sprite.isoZ = 50;    
 	this.id = -1;
 
 this.waveAngle = 0;
