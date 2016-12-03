@@ -33,6 +33,7 @@ Location.prototype.setZ = function(z) {
 };
 
 Location.prototype.set  = function(x, y, z) {
+	console.log("set to " + x + " " + y + " " + z);
 	this.x = x;
 	this.y = y;
 	this.z = z;

@@ -13,7 +13,7 @@ var ShitGame = function () {
     $.isoGroup    = null;
     $.isoEntities = null;
     
-    $.debugging   = false;
+    $.debugging   = true;
     
     $.id          = 0;
     
@@ -148,6 +148,10 @@ var ShitGame = function () {
 	};
     
     $.addPlayer = function(options) {
+        
+        if ($.player && $.player.getId() == options.entityId)
+            return;
+        
         var player = new PlayerEntity(GameEngine);
         //console.log(options.id);
         player.ai = false;
@@ -238,7 +242,7 @@ var ShitGame = function () {
     };
 
     $.render = function() {
-        phaser.debug.text("Shitty Game v0.0.69", 2, 14, "#00ff00");
+        phaser.debug.text("A Really Shitty Game v0.0.69.1", 2, 14, "#00ff00");
 
         if ($.debugging === false)
             return;
@@ -252,8 +256,12 @@ var ShitGame = function () {
             phaser.debug.body(e, 'rgba(200, 100, 222, 0.6)', false);
         });
         
+        $.entities.forEach(function (e) {
+            phaser.debug.text("" + e.getId() || '--', e.getSprite().position.x - (e.getSprite().width / 2), e.getSprite().position.y - (e.getSprite().height + 15), "#00ff00");
+        });
+        
         phaser.debug.text("FPS " + phaser.time.fps || '--', 2, 14 * 2.3, "#00ff00");
-        phaser.debug.text("XYZ (" + Math.round($.player.sprite.isoX, 2) + "," + Math.round($.player.sprite.isoY, 2) + "," + Math.round($.player.sprite.isoZ,2)+")", 2, 14*3.3, "#00ff00");
+        //phaser.debug.text("XYZ (" + Math.round($.player.sprite.isoX, 2) + "," + Math.round($.player.sprite.isoY, 2) + "," + Math.round($.player.sprite.isoZ,2)+")", 2, 14*3.3, "#00ff00");
         phaser.debug.text($.entities.length, 2, 14*6, "#00ff00");
         
     };
@@ -262,19 +270,19 @@ var ShitGame = function () {
 		players.forEach(function(player) {	
 			var found = false;
 			
-			console.log(player.entityId);
+			//console.log(player.entityId);
 			
 			if (!player.entityId) // || player.entityId == undefined)
 				return;
-			
+
+			if ($.player && player.entityId == $.player.getId())
+			    return;
+
 			$.entities.forEach(function(entity) {
 				//console.log(entity);
 				//console.log(entity.getId() + " to " + player.entityId);
 //			    if (!(entity instanceof PlayerEntity))
 //			    	return;
-
-				if (player.entityId == _.player.getEntityId())
-				return;
 
 			    if (entity.getId() == player.entityId) {
 			        console.log(player.entityId + " goes to " + parseInt(player.location.x) + " " + parseInt(player.location.y) + " " + parseInt(player.location.z));

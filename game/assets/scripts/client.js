@@ -12,22 +12,22 @@ Client.prototype.init = function() {
 	this.socket.emit("test", {number : 420});
 	
 	this.socket.on("addPlayer", function(player) {
+		console.log("add player");
 		$.game.addPlayer(player);
 	});
 	
 	this.socket.on("removePlayer", function(player) {
-		
+		console.log("remove player");
 	});
 	
 	this.socket.on("sync", function(data) {
+		console.log("sync");
 		$.game.updatePlayers(data.players);
 	});
 	
 	this.socket.on("welcome", function(data) {
 		console.log("Server welcomed us " + data.test);
 	});
-	
-//	setInterval(Client.prototype.sendData, 50);
 };
 
 Client.prototype.getGame = function() {
@@ -41,8 +41,6 @@ Client.prototype.getSocket = function() {
 Client.prototype.sendData = function(client) {
 	if (client.game.getPlayer() == null)
 		return;
-	
-	//console.log(client.game.getPlayer().getX());
 	
 	client.socket.emit("sync", {
 		x : client.game.getPlayer().getX(),

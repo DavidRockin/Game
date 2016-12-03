@@ -59,25 +59,26 @@ var Server = function(options) {
 					(Math.random() * (200 - 5) + 5).toFixed(3),
 					-49
 				));
-				
+				 
 				client.emit("addPlayer", {
 					entityId       : _.entityId,
 					isLocal  : true,
 					location : player.getData()
 				});
 				
-				client.broadcast.emit("addPlayer", {
+				/**client.broadcast.emit("addPlayer", {
 					entityId       : _.entityId,
 					isLocal  : false,
 					location : player.getData()
-				});
+				});*/
 				
 			});
 			
 			client.on("sync", function(data) {
-				console.log("Player syncing with us");
+				//console.log("Player syncing with us");
 				
-				//console.log(_.players);
+				console.log(_.players);
+				
 				_.players.forEach(function(player) {
 					if (player.getEntityId() == client.entityId) {
 					    if (data.x < 0 || data.y < 0 || data.x > 500 || data.y > 500 || data.z < -50 || data.z > 50)
