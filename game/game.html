@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Game Engine</title>
+	<script type="text/javascript" src="/assets/scripts/game-menu.js"></script>
+	<link rel="stylesheet" href="/assets/game.css" />
+	
+	<link href="https://fonts.googleapis.com/css?family=Aref+Ruqaa|Gloria+Hallelujah" rel="stylesheet">
+</head>
+<body>
+	
+	<div class="container">
+		
+		<div class="section show" id="main">
+			<h1 class="logo">Shitty<span>Game</span></h1>
+			
+			<div class="box box-news">
+				<h3>What's new!</h3>
+				<div class="box-content overflow">
+					
+					<ul>
+						<li><strong>December 6/2016</strong><br />
+							This game doesn't even work!!!</li>
+					</ul>
+					
+				</div>
+			</div>
+			
+			<div class="box box-menu">
+				<ul class="menu">
+					<li><a data-target="servers">Connect to Server</a></li>
+					<li><a data-target="about">About</a></li>
+					<li><a data-target="options">Options</a></li>
+				</ul>
+			</div>
+		</div>
+		
+		<div class="section" id="about">
+			<h1 class="logo">Shitty<span>Game</span></h1>
+			
+			<div class="box box-about">
+				<h3>About dis game</h3>
+				<div class="box-content">
+					This game does't work, so i have no idea.
+				</div>
+			</div>
+			<a data-target="main" class="button">Main Menu</a>
+		</div>
+		
+		<div class="section" id="options">
+			<h1 class="logo">Shitty<span>Game</span></h1>
+			
+			<div class="box box-options">
+				<h3>Options</h3>
+				<div class="box-content">
+					eventual options settings, graphics, hud, sfx, etc
+				</div>
+			</div>
+			<a data-target="main" class="button">Main Menu</a>
+		</div>
+		
+		<div class="section" id="servers">
+			<h1 class="logo">Shitty<span>Game</span></h1>
+			
+			<div class="box box-servers">
+				<h3>Servers</h3>
+				<div class="box-content">
+					Todo: populate with servers!
+				</div>
+			</div>
+			
+			<div class="box box-connect">
+				<h3>Connec to Server!</h3>
+				
+				<div class="box-form">
+					<input type="text" name="serverAddress" class="input" placeholder="Server IP" />
+					<button class="button" name="serverConnect">Connect</button>
+				</div>
+			</div>
+			
+			<a data-target="main" class="button">Main Menu</a>
+		</div>
+		
+		<div class="section" id="game">
+			<div id="phaser"></div>
+		</div>
+		
+	</div>
+	
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	
+	<script type="text/javascript">
+		(function() {
+			new GameMenu();
+		})();
+	</script>
+	
+</body>
+</html>
