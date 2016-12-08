@@ -10,7 +10,7 @@ var GameMenu = function() {
 
 	this.loadGame = function(serverIP) {
 		this.changeScreen("loading");
-		this.GameClient = new Client(this.GameEngine, serverIP, function(ex) {
+		this.GameClient = new Client(this.GameEngine, serverIP, this, function(ex) {
 			console.log(ex);
 			$("#status").text("failed to establish connection to server!");
 		});
@@ -21,6 +21,9 @@ var GameMenu = function() {
 		$("div.section#" + screen).addClass("show");
 	};
 
+	this.setStatus = function(status) {
+		$("#status").text(status);
+	};
 
 	$("a").on("click", function(e) {
 		var target = $(this).attr("data-target");

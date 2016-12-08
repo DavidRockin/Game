@@ -59,12 +59,25 @@ var Server = function(options) {
 					(Math.random() * (200 - 5) + 5).toFixed(3),
 					-49
 				));
-				 
+				
+				client.emit("sendWorld", {
+				    world : [
+				        [1, 1, 1, 1, 1],
+				        [1, 2, 1, 1, 1],
+				        [1, 2, 2, 1, 1],
+				        [1, 1, 1, 2, 1],
+				        [1, 1, 1, 1, 1],
+				    ]
+				});
+				
 				client.emit("addPlayer", {
 					entityId       : _.entityId,
 					isLocal  : true,
 					location : player.getData()
 				});
+				
+				// needs stuff
+				client.emit("spawn", {});
 				
 				/**client.broadcast.emit("addPlayer", {
 					entityId       : _.entityId,

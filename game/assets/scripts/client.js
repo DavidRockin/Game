@@ -1,9 +1,14 @@
-var Client = function(game, host, callback) {
+var Client = function(game, host, gameMenu, callback) {
 	this.game = game;
 	this.callback = callback;
+	this.gameMenu = gameMenu;
+	
+	this.loading = true;
+	
 	try {
 		this.socket = io.connect(host);
 	} catch (ex) {
+		console.log(ex);
 		callback();
 		return;
 	}
@@ -13,6 +18,8 @@ var Client = function(game, host, callback) {
 
 Client.prototype.init = function() {
 	var $ = this;
+	
+	console.log("registering events");
 	
 	this.socket.emit("test", {number : 420});
 	
@@ -32,6 +39,21 @@ Client.prototype.init = function() {
 	
 	this.socket.on("welcome", function(data) {
 		console.log("Server welcomed us " + data.test);
+	});
+	
+	this.socket.on("sendWorld", function(data) {
+		console.log("Server sent world data ");
+		$.gameMenu.setStatus("building the world");
+		$.game.setMap(new Map(data.world, $.game, $.game.getPhaser()));
+	});
+	
+	this.socket.on("spawn", function(data) {
+		$.gameMenu.setStatus("spawning you in!");
+		$.gameMenu.changeScreen("game");
+	});
+	
+	this.socket.emit("join", {
+		type : 1
 	});
 	
 	//this.socket.on('error', function(data) {
