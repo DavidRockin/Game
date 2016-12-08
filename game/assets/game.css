@@ -189,3 +189,25 @@ div.section#servers a.button {
 	left: 15%;
 	top: 70%;
 }
+
+
+/**
+ * LOADING SCREEN
+ */
+div.section#loading .logo {
+	display: block;
+	margin: 0 40%; /* idk but this looks aight on my screen */
+}
+div.section#loading h3 {
+	margin: 10% 0px 2%;
+	font-family: 'Aref Ruqaa', serif;
+	color: #FFF;
+	font-size: 33pt;
+	text-align: center;
+}
+div.section#loading h4#status {
+	color: #FFF;
+	font-family: 'Gloria Hallelujah', cursive;
+	font-size: 22pt;
+	text-align: center;
+}

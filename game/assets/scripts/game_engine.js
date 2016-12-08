@@ -17,6 +17,8 @@ var ShitGame = function () {
     
     $.id          = 0;
     
+    $.client      = null;
+    
     $.getPhaser = function() {
         return phaser;
     };
@@ -37,8 +39,12 @@ var ShitGame = function () {
         return $.isoEntities;
     };
 
+	$.setClient = function(client) {
+		$.client = client;
+	};
+
 	$.init = function() {
-        phaser = new Phaser.Game("100%", "100%", Phaser.CANVAS, "", {
+        phaser = new Phaser.Game("100%", "100%", Phaser.CANVAS, "phaser", {
             preload : $.preload,
             create  : $.create,
             update  : $.update,
@@ -134,7 +140,8 @@ var ShitGame = function () {
 
         $.entities = [];
         
-        GameClient.getSocket().emit("join", {type: 1});
+        if ($.client !== null)
+	        $.client.getSocket().emit("join", {type: 1});
         
         /*$.player = new PlayerEntity(GameEngine);
         $.player.setId($.id);

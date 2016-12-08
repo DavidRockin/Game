@@ -3,6 +3,21 @@
 <html>
 <head>
 	<title>Game Engine</title>
+	
+	    <script type="text/javascript" src="assets/scripts/phaser-2.4.2.min.js"></script>
+    <script type="text/javascript" src="assets/scripts/phaser-plugin-isometric.min.js"></script>
+    <script type="text/javascript" src="assets/scripts/easystar-0.3.0.min.js"></script>
+    <script type="text/javascript" src="assets/scripts/socket.io.js"></script>
+    <script type="text/javascript" src="assets/scripts/scripts.js"></script>
+    
+    <script type="text/javascript" src="assets/scripts/client.js"></script>
+    <script type="text/javascript" src="assets/scripts/game_engine.js"></script>
+    <script type="text/javascript" src="assets/scripts/entity.js"></script>
+    <script type="text/javascript" src="assets/scripts/map.js"></script>
+    <script type="text/javascript" src="assets/scripts/entity/player.js"></script>
+    <script type="text/javascript" src="assets/scripts/entity/item.js"></script>
+
+	
 	<script type="text/javascript" src="/assets/scripts/game-menu.js"></script>
 	<link rel="stylesheet" href="/assets/game.css" />
 	
@@ -71,11 +86,13 @@
 			</div>
 			
 			<div class="box box-connect">
-				<h3>Connec to Server!</h3>
+				<h3>Connect to Server!</h3>
 				
 				<div class="box-form">
-					<input type="text" name="serverAddress" class="input" placeholder="Server IP" />
-					<button class="button" name="serverConnect">Connect</button>
+					<form name="connect">
+						<input type="text" name="serverAddress" class="input" placeholder="Server IP" />
+						<button type="submit" class="button" name="serverConnect">Connect</button>
+					</form>
 				</div>
 			</div>
 			
@@ -84,6 +101,12 @@
 		
 		<div class="section" id="game">
 			<div id="phaser"></div>
+		</div>
+		
+		<div class="section" id="loading">
+			<h1 class="logo">Shitty<span>Game</span></h1>
+			<h3>Loading...</h3>
+			<h4 id="status">Setting things up...</h4>
 		</div>
 		
 	</div>

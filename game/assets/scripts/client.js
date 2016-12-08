@@ -1,9 +1,14 @@
-var Client = function(game, host) {
-	
+var Client = function(game, host, callback) {
 	this.game = game;
-	this.socket = io.connect(host);
-	this.init();
+	this.callback = callback;
+	try {
+		this.socket = io.connect(host);
+	} catch (ex) {
+		callback();
+		return;
+	}
 	
+	this.init();
 };
 
 Client.prototype.init = function() {
@@ -28,6 +33,17 @@ Client.prototype.init = function() {
 	this.socket.on("welcome", function(data) {
 		console.log("Server welcomed us " + data.test);
 	});
+	
+	//this.socket.on('error', function(data) {
+		//$.callback();
+	//	console.log(data);
+	//});
+	/*socket.on('connect', function(){
+		console.log('Connected');
+	});
+	socket.on('disconnect', function () {
+		console.log('Disconnected');
+	});*/
 };
 
 Client.prototype.getGame = function() {
