@@ -52,6 +52,11 @@ Client.prototype.init = function() {
 		$.gameMenu.changeScreen("game");
 	});
 	
+	this.socket.on("sendTile", function(data) {
+		console.log(data);
+		$.game.getMap().setTile(data.location.x, data.location.y, data.location.z, data.tile);
+	});
+	
 	this.socket.emit("join", {
 		type : 1
 	});

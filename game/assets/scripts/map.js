@@ -83,6 +83,14 @@ function Map(tiles, ShitGame, game) {
         
         this.waveAngle += Math.PI*2 / 100;
 	};
+	
+	this.setTile = function(x, y, z, id) {
+		//if (this.tiles[y][x]) {
+		if (!this.levels[y])
+			this.levels[y] = [];
+		this.levels[y][x] = this.parseTile(id, x, y, z);
+		//}
+	};
     
     this.parseTile = function(id, x, y, z) {
         z = z || 0;

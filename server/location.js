@@ -1,8 +1,8 @@
-var Location = function() {
-	this.x     = 0;
-	this.y     = 0;
-	this.z     = 0;
-	this.world = "main";
+var Location = function(x, y, z, world) {
+	this.x     = x || 0;
+	this.y     = y || 0;
+	this.z     = z || 0;
+	this.world = world || "main";
 };
 
 Location.prototype.getX = function() {

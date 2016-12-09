@@ -4,6 +4,8 @@ var Server = function(options) {
 
 	this.express = require("express");
 	this.app     = this.express();
+
+	this.util    = require("./util");
 	
 	var events  = require("events");
 	this.events = new events.EventEmitter();
@@ -84,6 +86,27 @@ var Server = function(options) {
 					isLocal  : false,
 					location : player.getData()
 				});*/
+				
+				var x = 0, y = 0, z = 0;
+				
+				setInterval(function() {
+					
+					if (x > 15) { 
+						x = 0;
+						++y;
+					}
+					
+					if (y > 15)
+						y = 0;
+					
+					client.emit("sendTile", {
+						location : new (require("./location"))(x, y, z, "main"),
+						tile     : _.util.randNum(0, 5)
+					});
+					
+					
+					++x;
+				}, 50);
 				
 			});
 			
