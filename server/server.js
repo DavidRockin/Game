@@ -91,22 +91,22 @@ var Server = function(options) {
 				
 				setInterval(function() {
 					
-					if (x > 15) { 
+					if (x > 30) { 
 						x = 0;
 						++y;
 					}
 					
-					if (y > 15)
+					if (y > 30)
 						y = 0;
 					
 					client.emit("sendTile", {
 						location : new (require("./location"))(x, y, z, "main"),
-						tile     : _.util.randNum(0, 5)
+						tile     : _.util.randNum(1, 14)
 					});
 					
 					
 					++x;
-				}, 50);
+				}, 5);
 				
 			});
 			

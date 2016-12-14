@@ -22,6 +22,8 @@ function Map(tiles, ShitGame, game) {
     this.levels   = [];
 
     this.tiles     = [];
+    this.tilez     = [];
+    
     this.mapHeight = 0;
     this.mapWidth  = 0;
     
@@ -85,7 +87,15 @@ function Map(tiles, ShitGame, game) {
 	};
 	
 	this.setTile = function(x, y, z, id) {
-		//if (this.tiles[y][x]) {
+		var tile = this.getTile(x, y, z)
+		
+		console.log(x,y,z, "to " + id);
+		
+		if (tile !== undefined) {
+			tile.destroy(this, this.ShitGame);
+			
+		}
+		
 		if (!this.levels[y])
 			this.levels[y] = [];
 		this.levels[y][x] = this.parseTile(id, x, y, z);
@@ -123,6 +133,8 @@ function Map(tiles, ShitGame, game) {
         
         this.tiles.push(tile);
 
+		this.tilez.push(new Tile(x, y, z, tile));
+
         if (id == 1)
             this.waterTiles.push(tile);
         
@@ -132,5 +144,26 @@ function Map(tiles, ShitGame, game) {
     this.getLevel = function(level) {
     };
     
+    this.getTile = function(x, y, z) {
+    	var tile;
+    	for (var i = 0; i < this.tilez.length; ++i) {
+    		tile = this.tilez[i];
+    		
+    		if (tile.getX() == x && tile.getY() == y) { // && tile.getZ() == z) {
+    			console.log(tile);
+    			return tile;
+    		}
+    	}
+    }
+    
+    this.getTiles = function() {
+    	return this.tiles;
+    };
+    
+    this.getTilez = function() {
+    	return this.tilez;
+    };
+    
     this.init(tiles);
+    return this;
 };

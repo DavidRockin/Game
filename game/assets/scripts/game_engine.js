@@ -61,6 +61,7 @@ var ShitGame = function () {
     
 	$.preload = function() {
         phaser.time.advancedTiming = true;
+        phaser.stage.disableVisibilityChange = true;
         
         // load ploogs
         phaser.plugins.add(new Phaser.Plugin.Isometric(phaser));
@@ -222,7 +223,10 @@ var ShitGame = function () {
         
         phaser.debug.text("FPS " + phaser.time.fps || '--', 2, 14 * 2.3, "#00ff00");
         //phaser.debug.text("XYZ (" + Math.round($.player.sprite.isoX, 2) + "," + Math.round($.player.sprite.isoY, 2) + "," + Math.round($.player.sprite.isoZ,2)+")", 2, 14*3.3, "#00ff00");
-        phaser.debug.text($.entities.length, 2, 14*6, "#00ff00");
+        phaser.debug.text("Entities: " + $.entities.length, 2, 14*6, "#00ff00");
+        
+        if ($.map !== null)
+	       phaser.debug.text("Tile:     " + $.map.getTiles().length + " / " + $.map.getTilez().length, 2, 14*7, "#00ff00");
         
     };
     
